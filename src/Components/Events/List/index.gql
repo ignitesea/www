@@ -1,0 +1,13 @@
+#import "../AfterpartyInfo/index.gql"
+#import "../EventInfo/index.gql"
+#import "../CtaButton/index.gql"
+
+fragment EventsList on Event {
+  ...EventsEventInfo
+  ...EventsAfterpartyInfo
+  ...EventsCtaButton
+  title
+  sys {
+    id
+  }
+}

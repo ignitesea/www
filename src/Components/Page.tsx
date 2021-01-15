@@ -2,7 +2,7 @@ import { ReactElement, ReactNode } from 'react';
 import Head from 'next/head';
 
 export interface PageProps {
-  title: string | string[] | undefined
+  title?: string | string[] | null | undefined
   children: ReactNode
 }
 

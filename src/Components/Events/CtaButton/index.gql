@@ -1,0 +1,17 @@
+fragment EventsCtaButton on Event {
+  link
+  doorsAt
+  startsAt
+  ticketsAtDoor
+  soldOut
+
+  submissionsOpen
+  submissionsClose
+
+  earlybirdOnSale
+  earlybirdPrice
+
+  regularOnSale
+  regularPrice
+
+}

@@ -1,0 +1,10 @@
+#import "../Components/Events/List/index.gql"
+
+query index {
+  upcomingEvents: eventCollection(order:[startsAt_ASC]) {
+    items {
+      ...EventsList
+      type
+    }
+  }
+}

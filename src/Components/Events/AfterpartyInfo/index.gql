@@ -1,0 +1,8 @@
+#import "../VenueLink/index.gql"
+fragment EventsAfterpartyInfo on Event {
+  afterpartyVenue {
+    ...EventsVenueLink
+    name
+    ageRestriction
+  }
+}

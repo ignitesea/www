@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode, cloneElement, Children, useMemo } from 'react';
 import { ChakraProps } from '@chakra-ui/system';
 import { Grid } from '@chakra-ui/react';
-import { mapVisibilityAttributes } from '../../utils/visibilityBreakpoints';
+import { visibilityBreakpoints } from '../../utils';
 
 export interface GalleryProps extends ChakraProps {
   children: ReactNode
@@ -16,7 +16,7 @@ const GALLERY_MAX_VISIBLE_BREAKPOINTS = {
 
 export default function Gallery({ children, ...props }: GalleryProps): ReactElement {
   const visibleChildren = useMemo(
-    () => mapVisibilityAttributes(GALLERY_MAX_VISIBLE_BREAKPOINTS, children),
+    () => visibilityBreakpoints(GALLERY_MAX_VISIBLE_BREAKPOINTS, children),
     [GALLERY_MAX_VISIBLE_BREAKPOINTS, children],
   );
 
