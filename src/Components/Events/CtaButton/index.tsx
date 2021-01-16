@@ -58,6 +58,7 @@ function SubmitButton({ event, ...props }: ButtonProps): ReactElement {
       href="/submit"
       colorScheme="red"
       variant="solid"
+      rounded="sm"
       {...props}
     >
       Submit Talk

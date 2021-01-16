@@ -1,0 +1,37 @@
+overwrite: true
+schema:
+  "https://graphql.contentful.com/content/v1/spaces/${CONTENTFUL_SPACE_ID}":
+    headers:
+      Authorization: Bearer ${CONTENTFUL_TOKEN}
+generates:
+  # Download the schema for GraphQL IDE plugins
+  schema.graphql:
+    plugins:
+      - schema-ast
+
+  # Global types
+  src/graphql/types.ts:
+    plugins:
+      - typescript
+
+  # Colocate Typescript types/interfaces with components
+  ./:
+    documents: "src/Components/**/*.gql"
+    preset: near-operation-file
+    presetConfig:
+      extension: .query.ts
+      baseTypesPath: src/graphql/types.ts
+    plugins:
+      - typescript-operations
+      - typescript-graphql-request
+
+  # For pages, we generate one Typescript file. This simplifies fetching, but also NextJS doesn't allow colocating the
+  # .query.ts files (it tries to build them, and there's no ignore option).
+  src/graphql/pageQueries.ts:
+    documents: "src/**/*.gql"
+    preset: import-types
+    presetConfig:
+      typesPath: ./types
+    plugins:
+      - typescript-operations
+      - typescript-graphql-request

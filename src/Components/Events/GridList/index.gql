@@ -1,0 +1,16 @@
+#import "../AfterpartyInfo/index.gql"
+#import "../EventInfo/index.gql"
+#import "../CtaButton/index.gql"
+
+fragment EventsGridList on Event {
+  ...EventsEventInfo
+  ...EventsAfterpartyInfo
+  ...EventsCtaButton
+  title
+  previewImage {
+    eventsGrid: url(transform: { width: 400, height: 300, resizeStrategy: FILL })
+  }
+  sys {
+    id
+  }
+}

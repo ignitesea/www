@@ -1,0 +1,17 @@
+#import "./TextExplainer/index.gql"
+#import "./TextUpcoming/index.gql"
+
+fragment Hero on Query {
+  ...HeroTextExplainer
+  ...HeroTextUpcoming
+  heroImages: heroImageCollection(limit: 10) {
+    items {
+      backgroundColor
+      foregroundColor
+      description
+      photo {
+        url(transform: { width: 960, height: 600, resizeStrategy: FILL })
+      }
+    }
+  }
+}

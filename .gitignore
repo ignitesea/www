@@ -29,6 +29,12 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env
 
 # vercel
 .vercel
+
+# graphql
+schema.graphql
+src/graphql/types.ts
+src/**/*.query.ts

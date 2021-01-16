@@ -1,2 +1,7 @@
 export * from './types';
-export { default as Client } from './Client';
+export * from './pageQueries';
+import GraphQLClient from './Client';
+
+import { getSdk } from './pageQueries';
+
+export const client = getSdk(GraphQLClient);

@@ -3,23 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "concurrently \"next dev\" \"graphql-codegen --config codegen.yml -r dotenv/config --watch\"",
+    "build": "yarn run gql && next build",
+    "start": "next start",
+    "gql": "graphql-codegen --config codegen.yml -r dotenv/config"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.3",
     "@chakra-ui/react": "^1.1.4",
+    "@chakra-ui/system": "^1.1.5",
     "@emotion/react": "^11.1.4",
     "@emotion/styled": "^11.0.0",
+    "@types/luxon": "^1.25.1",
+    "dotenv": "^8.2.0",
     "framer-motion": "^3.2.1",
+    "graphql": "^15.4.0",
+    "graphql-request": "^3.4.0",
+    "luxon": "^1.25.0",
     "next": "10.0.5",
     "react": "17.0.1",
     "react-dom": "17.0.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "1.20.0",
+    "@graphql-codegen/import-types-preset": "^1.18.1",
+    "@graphql-codegen/near-operation-file-preset": "^1.17.13",
+    "@graphql-codegen/schema-ast": "^1.18.1",
+    "@graphql-codegen/typescript": "1.20.0",
+    "@graphql-codegen/typescript-graphql-request": "^3.0.0",
+    "@graphql-codegen/typescript-operations": "1.17.13",
     "@types/node": "^14.14.21",
     "@types/react": "^17.0.0",
+    "concurrently": "^5.3.0",
     "typescript": "^4.1.3"
   }
 }

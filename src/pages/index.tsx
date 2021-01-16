@@ -1,36 +1,44 @@
 import { ReactElement } from 'react';
 import { GetStaticPropsResult } from 'next';
+import { Box, Container, Text } from '@chakra-ui/react';
+import { DateTime } from 'luxon';
+import Hero from '../Components/Hero';
 import Page from '../Components/Page';
-import EventsList from '../Components/Events/List';
-import { Client } from '../graphql';
-import { IndexQuery, getSdk } from './index.query';
-import { Box, Container } from '@chakra-ui/react';
+import EventsGridList from '../Components/Events/GridList';
+import { client, IndexQuery } from '../graphql';
 
-export default function Index({ upcomingEvents }: IndexQuery): ReactElement {
-  // We'll show the next upcoming main event in the hero section, and then if there's more than one upcoming event,
-  // we'll also show a list of all upcoming events.
+export default function Index({ upcomingEvents, ...query }: IndexQuery): ReactElement {
+  // The hero already shows the next upcoming main event, so we only need to show the event list section if there's
+  // more than one upcoming event, or a minor upcoming event.
   const firstMainEvent = upcomingEvents?.items.filter((e) => e?.type === 'main event')[0];
-  const eventsListSection = firstMainEvent && upcomingEvents && upcomingEvents.items.length > 1
-    ? (
-      <Box bg="gray.100">
-        <Container maxWidth="4xl" pt={8} pb={8}>
-          <EventsList
-            itemProps={{ bg: 'white', rounded: 'sm' }}
-            events={upcomingEvents?.items}
-          />
-        </Container>
-      </Box>
-    ) : <></>;
+  const showEventList = (
+    upcomingEvents?.items
+    && (
+      (firstMainEvent && upcomingEvents.items.length > 1)
+      || upcomingEvents.items.length > 0
+    )
+  );
 
   return (
     <Page>
-      {eventsListSection}
+      <Hero query={query} />
+      {showEventList && (
+        <Box bg="gray.100">
+          <Container maxWidth="4xl" pt={8} pb={8}>
+            <Text as="h2" fontWeight="bold" fontSize="xl" mb={4}>Upcoming Events</Text>
+            <EventsGridList
+              itemProps={{ bg: 'white', rounded: 'sm' }}
+              events={upcomingEvents?.items}
+            />
+          </Container>
+        </Box>
+      )}
     </Page>
   );
 }
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<IndexQuery>> {
-  const result = await getSdk(Client).index();
+  const result = await client.index({ now: DateTime.utc().toISO() });
   return {
     props: result,
   }

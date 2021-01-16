@@ -7,10 +7,11 @@ import { EventsEventInfoFragment } from './index.query';
 
 export interface EventInfoProps extends ChakraProps {
   event: EventsEventInfoFragment
+  separatorStyle?: 'middot' | 'break' | undefined | null
   linkProps?: ChakraProps | undefined | null
 }
 
-export default function EventInfo({ event, linkProps, ...props }: EventInfoProps): ReactElement {
+export default function EventInfo({ event, linkProps, separatorStyle, ...props }: EventInfoProps): ReactElement {
   const startTime = DateTime.fromISO(event.doorsAt || event.startsAt).toLocaleString({
     day: 'numeric',
     month: 'short',
@@ -21,8 +22,8 @@ export default function EventInfo({ event, linkProps, ...props }: EventInfoProps
   return (
     <Text {...props}>
         <VenueLink venue={event.venue} {...linkProps} />
-        &thinsp;&middot;&thinsp;
-        {startTime}
+        {separatorStyle === 'break' ? <br /> : <>&thinsp;&middot;&thinsp;</>}
+        {startTime}{event.doorsAt && ' doors'}
         {event.venue?.ageRestriction && (<>&thinsp;&middot;&thinsp;{event.venue.ageRestriction}</>)}
     </Text>
   )

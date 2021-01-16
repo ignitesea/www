@@ -1,0 +1,14 @@
+#import "../Events/EventInfo/index.gql"
+#import "../Events/AfterpartyInfo/index.gql"
+#import "../Events/CtaButton/index.gql"
+
+fragment HeroTextUpcoming on Query {
+  heroTextUpcoming: eventCollection(where: { type: "main event", endsAt_gt: $now }, limit: 1) {
+    items {
+      ...EventsEventInfo
+      ...EventsAfterpartyInfo
+      ...EventsCtaButton
+      title
+    }
+  }
+}
