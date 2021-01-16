@@ -33,7 +33,7 @@ export default function eventLifecycle({
     doorsAt,
     startsAt,
     endsAt,
-    submissionOpen,
+    submissionsOpen,
     submissionsClose
   } = maybeDates(dates);
 
@@ -42,7 +42,7 @@ export default function eventLifecycle({
   const now = DateTime.local();
 
   // Calculate submission lifecycle
-  const acceptingSubmissions = (submissionOpen && submissionsClose && submissionOpen < now && submissionsClose > now)
+  const acceptingSubmissions = (submissionsOpen && submissionsClose && submissionsOpen < now && submissionsClose > now)
     || false;
 
   // Calculate onsale lifecycle
