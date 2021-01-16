@@ -43,5 +43,6 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<IndexQuery>
   const result = await client.index({ now: DateTime.utc().toISO() });
   return {
     props: result,
+    revalidate: 60,
   }
 }
