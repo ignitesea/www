@@ -16,7 +16,9 @@ generates:
 
   # Colocate Typescript types/interfaces with components
   ./:
-    documents: "src/Components/**/*.gql"
+    documents:
+      - src/Components/**/*.gql
+      - src/utils/**/*.gql
     preset: near-operation-file
     presetConfig:
       extension: .query.ts

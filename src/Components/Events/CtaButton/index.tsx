@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
-import { ChakraProps, ComponentWithAs } from '@chakra-ui/system';
-import { DateTime } from 'luxon';
-import { EventsCtaButtonFragment } from './index.query';
+import { ChakraProps } from '@chakra-ui/system';
 import { Box, Button, ButtonGroup, ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
+import { EventsCtaButtonFragment } from './index.query';
+import { eventLifecycle, EventLifecycle } from '../../../utils';
 
 export interface CtaButtonProps extends ChakraProps {
   event: EventsCtaButtonFragment
@@ -18,29 +18,18 @@ export default function CtaButton({
   buyProps,
   ...props
 }: CtaButtonProps): ReactElement {
-  const now = DateTime.local();
-  const areSubmissionsOpen = (
-    (event.submissionsOpen && event.submissionsClose)
-    && DateTime.fromISO(event.submissionsOpen) < now
-    && DateTime.fromISO(event.submissionsClose) > now
-  );
-  if (areSubmissionsOpen && (submitLocation === 'bottom' || !submitLocation)) {
-    return (
-      <Box {...props}>
-        <Box><BuyButton event={event} {...buyProps} /></Box>
-        <Box><SubmitButton event={event} {...submitProps} /></Box>
-      </Box>
-    );
-  } else if (areSubmissionsOpen && submitLocation === 'right') {
-    return (
-      <ButtonGroup {...props}>
-        <BuyButton event={event} {...buyProps} />
-        <SubmitButton event={event} {...submitProps} />
-      </ButtonGroup>
-    );
+  const lifecycle = eventLifecycle(event);
+
+  const buyButton = <BuyButton lifecycle={lifecycle} event={event} {...buyProps} />;
+  const submitButton = <SubmitButton lifecycle={lifecycle} event={event} {...submitProps} />;
+
+  if (lifecycle.acceptingSubmissions && (submitLocation === 'bottom' || !submitLocation)) {
+    return <Box {...props}><Box>{buyButton}</Box><Box>{submitButton}</Box></Box>;
+  } else if (lifecycle.acceptingSubmissions && submitLocation === 'right') {
+    return <ButtonGroup {...props}>{buyButton}{submitButton}</ButtonGroup>;
   }
 
-  return <Box {...props}><BuyButton event={event} {...buyProps} /></Box>;
+  return <Box {...props}>{buyButton}</Box>;
 }
 
 //
@@ -49,6 +38,7 @@ export default function CtaButton({
 
 interface ButtonProps extends ChakraProps {
   event: EventsCtaButtonFragment
+  lifecycle: EventLifecycle
 }
 
 function SubmitButton({ event, ...props }: ButtonProps): ReactElement {
@@ -66,44 +56,31 @@ function SubmitButton({ event, ...props }: ButtonProps): ReactElement {
   );
 }
 
-function BuyButton({ event, ...props }: ButtonProps): ReactElement {
-  const now = DateTime.local();
+function getBuyButtonText({
+  onSaleLifecycle,
+  earliestOnSale,
+  currentPricingScheme,
+  currentPrice
+}: EventLifecycle): string {
+  if (onSaleLifecycle === 'soon') return earliestOnSale
+    ? `On Sale ${earliestOnSale.toLocaleString({ day: 'numeric', month: 'numeric' })}`
+    : 'On Sale Soon';
 
-  // Calculate availability dates
-  const firstSaleDate = !(event.regularOnSale || event.earlybirdOnSale)
-    ? null
-    : DateTime.fromISO(event.earlybirdOnSale || event.regularOnSale);
-
-  const regularOnSale = !event.regularOnSale
-    ? false
-    : DateTime.fromISO(event.regularOnSale) < now;
-
-  const earlybirdOnSale = !event.earlybirdOnSale
-    ? false
-    : (!regularOnSale && DateTime.fromISO(event.earlybirdOnSale) < now);
-
-  const hasEventStarted = DateTime.fromISO(event.doorsAt || event.startsAt) < now;
-  const haveSalesStarted = firstSaleDate && firstSaleDate < now;
-  const price = (earlybirdOnSale ? event.earlybirdPrice : event.regularPrice) ?? event.regularPrice ?? 0;
-  const canBuyTickets = (
-    !event.soldOut
-    && haveSalesStarted
-    && (!hasEventStarted || event.ticketsAtDoor)
-  );
-
-  // Default text is to buy a ticket
-  let text = price === 0
-    ? 'Register'
-    : `Buy Tickets ($${price.toFixed(0)}${earlybirdOnSale ? ' earlybird' : ''})`;
-
-  if (event.soldOut) text = 'Sold Out';
-  else if (!event.ticketsAtDoor && hasEventStarted) text = 'Sales Ended';
-  else if (!haveSalesStarted) {
-    text = firstSaleDate
-      ? `On Sale ${firstSaleDate.toLocaleString({ day: 'numeric', month: 'numeric' })}`
-      : `On Sale Soon`;
+  else if (onSaleLifecycle === 'on-sale') {
+    if (currentPricingScheme === 'free') return 'Register';
+    const displayPrice = Math.round(currentPrice || 0);
+    return `Buy Tickets ($${displayPrice}${currentPricingScheme === 'early-bird' ? ' earlybird' : ''})`;
   }
 
+  else if (onSaleLifecycle === 'sales-ended') return 'Sales Ended';
+  else if (onSaleLifecycle === 'sold-out') return 'Sold Out';
+  else if (onSaleLifecycle === 'event-ended') return 'Ended';
+
+  return 'Error';
+}
+
+function BuyButton({ event, lifecycle, ...props }: ButtonProps): ReactElement {
+  const canBuyTickets = lifecycle.onSaleLifecycle === 'on-sale';
   return (
     <Button
       colorScheme={canBuyTickets ? 'red' : 'gray'}
@@ -114,7 +91,7 @@ function BuyButton({ event, ...props }: ButtonProps): ReactElement {
       href={canBuyTickets ? (event.link || undefined) : undefined}
       {...props}
     >
-      {text}
+      {getBuyButtonText(lifecycle)}
     </Button>
   )
 }

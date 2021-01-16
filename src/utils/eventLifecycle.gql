@@ -1,0 +1,13 @@
+fragment UtilsEventLifecycle on Event {
+  regularOnSale
+  earlybirdOnSale
+  doorsAt
+  startsAt
+  endsAt
+  submissionsOpen
+  submissionsClose
+  earlybirdPrice
+  regularPrice
+  soldOut
+  ticketsAtDoor
+}

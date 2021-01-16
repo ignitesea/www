@@ -2,6 +2,7 @@ import { ReactElement } from 'react';
 import { GetStaticPropsResult } from 'next';
 import { Box, Container, Text } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
+import Announcement from '../Components/Announcement';
 import Hero from '../Components/Hero';
 import Page from '../Components/Page';
 import EventsGridList from '../Components/Events/GridList';
@@ -21,6 +22,7 @@ export default function Index({ upcomingEvents, ...query }: IndexQuery): ReactEl
 
   return (
     <Page>
+      <Announcement query={query} />
       <Hero query={query} />
       {showEventList && (
         <Box bg="gray.100">

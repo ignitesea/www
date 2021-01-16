@@ -37,4 +37,5 @@ yarn-error.log*
 # graphql
 schema.graphql
 src/graphql/types.ts
+src/graphql/pageQueries.ts
 src/**/*.query.ts

@@ -5,6 +5,7 @@ import { ThemeOverride } from '@chakra-ui/react';
 
 export const theme: ThemeOverride = {
   colors: {
+    black: '#201819',
     gray: {
       50: '#faf9f9',
       100: '#f0eded',

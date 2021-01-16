@@ -1,9 +1,11 @@
 #import "../Components/Events/List/index.gql"
 #import "../Components/Events/GridList/index.gql"
 #imort "../Components/Hero/index.gql"
+#import "../Components/Announcement/index.gql"
 
 query index($now: DateTime!) {
   ...Hero
+  ...Announcement
   upcomingEvents: eventCollection(order: [startsAt_ASC], where: { endsAt_gt: $now }) {
     items {
       ...EventsList
