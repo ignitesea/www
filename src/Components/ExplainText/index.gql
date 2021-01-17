@@ -1,0 +1,13 @@
+fragment ExplainText on Query {
+  explainTextTitle: keyValueCollection(where: { key: "hero.title" }, limit: 1) {
+    items {
+      value
+    }
+  }
+
+  explainTextText: keyValueCollection(where: { key: "hero.text" }, limit: 1) {
+    items {
+      value
+    }
+  }
+}

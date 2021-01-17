@@ -12,9 +12,12 @@ export interface EventInfoProps extends ChakraProps {
 }
 
 export default function EventInfo({ event, linkProps, separatorStyle, ...props }: EventInfoProps): ReactElement {
-  const startTime = DateTime.fromISO(event.doorsAt || event.startsAt).toLocaleString({
+  const startDate = DateTime.fromISO(event.doorsAt || event.startsAt).toLocaleString({
     day: 'numeric',
     month: 'short',
+  });
+
+  const startTime = DateTime.fromISO(event.doorsAt || event.startsAt).toLocaleString({
     hour: 'numeric',
     minute: '2-digit',
   });
@@ -22,9 +25,11 @@ export default function EventInfo({ event, linkProps, separatorStyle, ...props }
   return (
     <Text {...props}>
         <VenueLink venue={event.venue} {...linkProps} />
-        {separatorStyle === 'break' ? <br /> : <>&thinsp;&middot;&thinsp;</>}
+        {separatorStyle === 'break' ? <br /> : <>&ensp;&bull;&ensp;</>}
+        {startDate}
+        {separatorStyle !== 'break' && <>&ensp;&bull;&ensp;</>}
         {startTime}{event.doorsAt && ' doors'}
-        {event.venue?.ageRestriction && (<>&thinsp;&middot;&thinsp;{event.venue.ageRestriction}</>)}
+        {event.venue?.ageRestriction && (<>&ensp;&bull;&ensp;{event.venue.ageRestriction}</>)}
     </Text>
   )
 }

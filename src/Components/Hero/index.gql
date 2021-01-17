@@ -1,9 +1,7 @@
 #import "./TextExplainer/index.gql"
-#import "./TextUpcoming/index.gql"
 
 fragment Hero on Query {
   ...HeroTextExplainer
-  ...HeroTextUpcoming
   heroImages: heroImageCollection(limit: 10) {
     items {
       backgroundColor

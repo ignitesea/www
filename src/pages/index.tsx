@@ -6,6 +6,7 @@ import Announcement from '../Components/Announcement';
 import Hero from '../Components/Hero';
 import Page from '../Components/Page';
 import EventsGridList from '../Components/Events/GridList';
+import ExplainText from '../Components/ExplainText';
 import { client, IndexQuery } from '../graphql';
 
 export default function Index({ upcomingEvents, ...query }: IndexQuery): ReactElement {
@@ -23,7 +24,16 @@ export default function Index({ upcomingEvents, ...query }: IndexQuery): ReactEl
   return (
     <Page>
       <Announcement query={query} />
-      <Hero query={query} />
+      <Hero query={query} upcomingEvent={firstMainEvent} />
+      <Box bg="black">
+        <Container maxWidth="4xl" pt={8} pb={8}>
+          {firstMainEvent ? (
+            <ExplainText color="white" query={query} />
+          ) : (
+            <Text as="h2" fontSize="xl" fontWeight="bold">Past Talks</Text>
+          )}
+        </Container>
+      </Box>
       {showEventList && (
         <Box bg="gray.100">
           <Container maxWidth="4xl" pt={8} pb={8}>
