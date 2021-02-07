@@ -26,9 +26,7 @@ export default function EventInfo({ event, linkProps, separatorStyle, ...props }
     <Text {...props}>
         <VenueLink venue={event.venue} {...linkProps} />
         {separatorStyle === 'break' ? <br /> : <>&ensp;&bull;&ensp;</>}
-        {startDate}
-        {separatorStyle !== 'break' && <>&ensp;&bull;&ensp;</>}
-        {startTime}{event.doorsAt && ' doors'}
+        {startDate}, {startTime}{event.doorsAt && ' doors'}
         {event.venue?.ageRestriction && (<>&ensp;&bull;&ensp;{event.venue.ageRestriction}</>)}
     </Text>
   )
