@@ -9,6 +9,13 @@ export const GOOGLE_FONTS_LOAD = [
 ];
 
 export const theme: ThemeOverride = {
+  styles: {
+    global: {
+      body: {
+        color: 'black',
+      },
+    },
+  },
   components: {
     Button: {
       baseStyle: {

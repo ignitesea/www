@@ -4,11 +4,13 @@
 #import "../Components/Announcement/index.gql"
 #import "../Components/Hero/TextUpcoming/index.gql"
 #import "../Components/ExplainText/index.gql"
+#import "../Components/AboutText/index.gql"
 
 query index($now: DateTime!) {
   ...Hero
   ...Announcement
   ...ExplainText
+  ...AboutText
   upcomingEvents: eventCollection(order: [startsAt_ASC], where: { endsAt_gt: $now }) {
     items {
       ...EventsList

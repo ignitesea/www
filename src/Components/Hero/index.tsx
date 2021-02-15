@@ -107,6 +107,7 @@ function imageDisplay(url: string, backgroundColor: string, props: ChakraProps):
       bottom={0}
       left={0}
       transition={TRANSITION}
+      key={url}
       {...props}
     >
       <Box

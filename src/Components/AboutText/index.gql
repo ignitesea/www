@@ -1,0 +1,23 @@
+fragment AboutText on Query {
+  aboutTextTitle: keyValueCollection(where: { key: "about.title" }, limit: 1) {
+    items {
+      value
+    }
+  }
+
+  aboutTextText: keyValueCollection(where: { key: "about.text" }, limit: 1) {
+    items {
+      value
+    }
+  }
+
+  sponsorCollection (limit: 20) {
+    items {
+      name
+      link
+      logo {
+        url
+      }
+    }
+  }
+}
